@@ -78,7 +78,7 @@ module knauf(innen,aussen)
         }
         sphere(3);
     }//minkowsky
-} 
+} //end module
 
 //knauf(26,85);
 //  knauf(16,43);

@@ -13,7 +13,7 @@ module spulenhalter()
         union()
         {
            metric_thread (diameter=52, pitch=14, length=110,  internal = false);
-            knauf(innenradius,aussenradius);   
+           knauf(innenradius,aussenradius);   
         }
     
     
@@ -21,9 +21,9 @@ module spulenhalter()
         union()
         {
             translate([0,0,100.5]) kugellagermaske();
-            color("red")  translate([0,0,-11.5]) rotate([180,0,0])kugellagermaske();
+            color("red")  translate([0,0,7]) rotate([180,0,0])kugellagermaske();
             translate([00,0,-50]) cylinder(h=200,r=7);
         }
     }
 }
-//spulenhalter();
+spulenhalter();
