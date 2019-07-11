@@ -76,7 +76,7 @@ module knauf(innen,aussen)
                     }//4 Augen
                 }//was Auszuschneiden ist   
         }
-        //sphere(3);
+        sphere(3);
     }//minkowsky
 } 
 

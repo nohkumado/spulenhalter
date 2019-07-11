@@ -4,7 +4,7 @@ include <knauf.scad>;
 
 module mutter()
 {
-    difference()
+    translate([0,0,50/3+7]) difference()
     {
         knauf(29,50);    
           color("blue")   
