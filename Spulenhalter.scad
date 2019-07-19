@@ -8,6 +8,8 @@ module spulenhalter()
     innenradius = 26;
     
     translate([0,0,aussenradius/3+7])
+    //difference()
+    //{
     difference()
     {
         union()
@@ -21,9 +23,11 @@ module spulenhalter()
         union()
         {
             translate([0,0,100.5]) kugellagermaske();
-            color("red")  translate([0,0,7]) rotate([180,0,0])kugellagermaske();
             translate([00,0,-50]) cylinder(h=200,r=7);
         }
     }
+        color("red")    translate([0,0,9.5]) rotate([180,0,0])kugellagermaske();
+     
+//}
 }
-spulenhalter();
+//spulenhalter();
