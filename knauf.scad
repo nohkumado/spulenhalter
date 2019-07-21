@@ -1,27 +1,30 @@
-module knauf(innen,aussen)
+module knauf(innen,aussen, mink = true)
 {
-  minkowski() // invalidate for debugging, don't forget to reactivate before printing
+  if(mink)
   {
+    minkowski() // invalidate for debugging, don't forget to reactivate before printing
+    {
+      knauf_kantig(innen,aussen);
+        sphere(3);
+    }//minkowsky
+  }
+  else
+  {
+    knauf_kantig(innen,aussen);
+  }
+
+} //end module
+
+module knauf_kantig(innen,aussen)
+{
   hoehe = aussen/3;
   secau = sqrt(2*pow(aussen,2))-6;
   secin = sqrt(2*pow((aussen - innen),2))-6;
   shrad = 0.7*(aussen-innen)-1;
 
-  rotate([180,0,0])
     difference() //mit Augen
     {
-      union() //Koerper
-      {
-        translate([0,0, 0]) cylinder(h = hoehe, r1 = innen, r2 = aussen,$fa = 3);
-        //hull()
-        //{  
-        translate([0,0, hoehe-1]) cylinder(h = 8,  r1 = aussen, r2 = aussen,$fa = 3);
-        //color("red")translate([0,0, aussen/2]) rotate_extrude(convexity = 10)
-        //translate([aussen-2, 0, 0])
-        //circle(r = 4.2, $fn = 100);
-        //}
-      }
-
+      koerper(innen,aussen,hoehe);
       union() //was Auszuschneiden ist
       {
         union() //4 Ausschnitte
@@ -76,11 +79,28 @@ module knauf(innen,aussen)
         }//4 Augen
       }//was Auszuschneiden ist   
     }
-  sphere(3);
-  }//minkowsky
-} //end module
+}//module knauf_kantig(innen,aussen)
+module koerper(innen,aussen, hoehe)
+
+{
+      union() //Koerper
+      { 
+        cylinder(h = 8,  r1 = aussen, r2 = aussen,$fa = 3);
+        translate([0,0, 8]) cylinder(h = hoehe, r2 = innen, r1 = aussen,$fa = 3);
+        //hull()
+        //{  
+        //color("red")translate([0,0, aussen/2]) rotate_extrude(convexity = 10)
+        //translate([aussen-2, 0, 0])
+        //circle(r = 4.2, $fn = 100);
+        //}
+      }
+}// module knauffbasis(innen,aussen)
 
 //knauf(26,85);
-//  knauf(16,43);
+  //knauf(16,43,false);
+  //translate([0,0,100])
+  //koerper(8,21,21/3);
+  //knauf_kantig(8,21);
+  //knauf(16,43);
 //knauf(26,43);
 
