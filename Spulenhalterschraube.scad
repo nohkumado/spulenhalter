@@ -9,8 +9,8 @@ module mutter(minkowsky = true)
     {
         knauf(29,50,minkowsky);    
           color("blue")   
-          translate([0,0, -1]) 
-          metric_thread (diameter=52, pitch=14, length=54,  internal = true);
+          translate([0,0, -5]) 
+          scale([1.1,1.1,1])metric_thread (diameter=50, pitch=8, length=54,  internal = true);
     }
 }
 //mutter(false);
