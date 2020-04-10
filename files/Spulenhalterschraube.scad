@@ -1,5 +1,5 @@
-include <threads.scad>;
-include <knauf.scad>;
+use <threads.scad>;
+use <knauf.scad>;
 
 
 module mutter(minkowsky = true)
@@ -13,4 +13,4 @@ module mutter(minkowsky = true)
           scale([1.1,1.1,1])metric_thread (diameter=50, pitch=8, length=54,  internal = true);
     }
 }
-//mutter(false);
+mutter(false);

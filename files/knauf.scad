@@ -1,3 +1,12 @@
+//Examples
+knauf(26,85);
+  //knauf(16,43,false);
+  //translate([0,0,100])
+  //koerper(8,21,21/3);
+  //knauf_kantig(8,21);
+  //knauf(16,43);
+//knauf(26,43);
+
 module knauf(innen,aussen, mink = true)
 {
   if(mink)
@@ -95,12 +104,4 @@ module koerper(innen,aussen, hoehe)
         //}
       }
 }// module knauffbasis(innen,aussen)
-
-//knauf(26,85);
-  //knauf(16,43,false);
-  //translate([0,0,100])
-  //koerper(8,21,21/3);
-  //knauf_kantig(8,21);
-  //knauf(16,43);
-//knauf(26,43);
 
