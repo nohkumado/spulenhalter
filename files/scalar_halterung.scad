@@ -2,23 +2,25 @@ use <../../masken/metrische_masken.scad>;
 use <../../masken/hinge.scad>;
 use <../../masken/hammernut.scad>;
 use <../../../mechanical/profile_30x30/extrusion_profile.scad>;
+openingAngle  =00; //careful doesn't work
+toleranz = 0.2;
 translate([0,099,242])
 {
-  color("grey")
-    rotate([90,0,0])translate([0,0,-105])cylinder(d=9.5, h = 210);
-  translate([0,-72,-15]) AchsenScharnier(axd = 10);
+  //color("grey") 
+  //translate([0,105*(1-sin(openingAngle)),105*sin(openingAngle)])
+  %translate([0,-210-34*sin(openingAngle),30/2*(1-cos(openingAngle))])
+    translate([0,105,0])
+    rotate([openingAngle,0,0])
+    rotate([-90,0,0])
+    cylinder(d=9.5, h = 210);
+  translate([0,-72,-34/2]) AchsenScharnier(axd = 10, angle = openingAngle, width = 34, tol= toleranz);
 }
-  color("grey")
-  translate([0,027.0,208.0])
-rotate([0,0,90])
-  waagesensor(0);
-  color("grey")
-  extrusion_profile(size=30, height=200, size=30);
-//translate([40,0,0])
-//kappe();
+color("grey") translate([0,027.0,208.0]) rotate([0,0,90]) %waagesensor(0);
+color("grey") %extrusion_profile(size=30, height=200);
+//translate([40,0,0]) //kappe();
 
-  //ScharnierHalterung();
-  //waagesensor(30);
+//ScharnierHalterung();
+//waagesensor(30);
 module kappe(profil= 30,h1 = 5, h2=20)
 {
   difference()
@@ -52,62 +54,70 @@ module ScharnierHalterung()
       cube([100,30,2],center=true);
   }
 }//module ScharnierHalterung()
-module AchsenScharnier(axd = 10)
+module AchsenScharnier(axd = 10, angle = 45, width = 30, tol = 0.1)
 {
 
   //oberbau
+  translate([0,-(10*axd+5)/2,0])
+    rotate([angle,0,0])
+    translate([0,+(10*axd+5)/2,0])
+    difference()
+    {
+      union()
+      {
+        translate([0,-2*axd,1.5*axd]) AchsenHalter(axd );
+        translate([0,4*axd,1.5*axd]) rotate([0,0,180])AchsenHalter(axd );
+        cube([34,10*axd+5,5],center = true);//Halteplatte
+        translate([0,4*axd+5,-8])rotate([0,0,30])cylinder(d2 = width,d1=2, h=5, $fn=3);//Druckspitze
+        translate([0,-4.7*axd-2.6,-6.25])
+          rotate([0,0,180])
+          rotate([0,90,0]) translate([0,0,-width/2])
+          hinge(outd=10,axe= 2,h=width,parts=5, tol =tol,print="left", plate = "top",fld=2.4, opento= 90); 
+      }
+      translate([0,-4.7*axd-2.6,-6.25])
+      {
+        rotate([0,0,180])
+          rotate([0,90,0])
+          translate([0,0,-width/2])
+          hinge(outd=10,axe= 2,h=width,parts=5, tol =tol,mask = 2*tol,,print="right", plate = "bottom",fld=2.4, opento= 0); 
+      }
+    }
+
+  //color("black")
+  //unterbau
   difference()
   {
     union()
     {
-      translate([0,-2*axd,1.5*axd]) AchsenHalter(axd );
-      translate([0,4*axd,1.5*axd]) rotate([0,0,180])AchsenHalter(axd );
-      cube([30,10*axd+5,5],center = true);
-      translate([0,4*axd+5,-8])rotate([0,0,30])cylinder(d2 = 30,d1=2, h=5, $fn=3);
-    }
-    translate([0,-4.7*axd-2.6,-6.25])
-      scale([1.1,1.1,1.1])
+      translate([0,0,-width/2])
       {
-        rotate([-90,0,0])rotate([0,90,0])translate([0,0,-15])
-          hinge(outd=10,axe= 2,h=30,parts=5, tol =0.1,print="left", plate = "top",fld=0); 
-        rotate([-90,0,0])
-          rotate([0,-90,0])
-          translate([0,0,-15])
-          hinge(outd=10,axe= 2,h=30,parts=5, tol =0.1,print="right", plate = "bottom",fld=0); 
+        translate([0,3*axd,0])cube([width,4*axd+5,10],center = true);//Auflage, Gewicht
+        translate([0,-3*axd,-3.5])cube([width,4*axd+5,17],center = true);//Auflage
       }
-  }
-
-  //unterbau
-  difference()
-  {
-    translate([0,0,-15])union()
-    {
-      translate([0,3*axd,0])cube([30,4*axd+5,10],center = true);//Auflage, Gewicht
-      color("magenta")translate([0,-3*axd,-3.5])cube([30,4*axd+5,17],center = true);//Auflage
+      color("magenta")
+        translate([0,-4.7*axd-2.6,-6.25])
+        rotate([0,90,0])
+        translate([0,0,-width/2])
+        hinge(outd=10,axe= 2,h=width,parts=5, tol =tol,print="right", plate = "bottom",fld=2.4, opento= 90); 
     }
     union()
     {
       color("blue") translate([0,0,-19]) rotate([0,0,90])waagesensor(30);
       translate([0,-4.7*axd-2.6,-6.25])
-        scale([1.1,1.1,1.1])
-        {
-          rotate([-90,0,0])rotate([0,90,0])translate([0,0,-15])
-            hinge(outd=10,axe= 2,h=30,parts=5, tol =0.1,print="left", plate = "top",fld=0); 
-          rotate([-90,0,0])
-            rotate([0,-90,0])
-            translate([0,0,-15])
-            hinge(outd=10,axe= 2,h=30,parts=5, tol =0.1,print="right", plate = "bottom",fld=0); 
-        }
+        rotate([0,0,180])
+        rotate([0,90,0]) translate([0,0,-width/2])
+        hinge(outd=10,axe= 2,h=width,parts=5, tol =tol,mask = 2*tol,print="left", plate = "top",fld=2.4, opento= 90); 
+      translate([0,-4.7*axd-2.6,-6.25])
+        //scale([1.1,1.1,1.1])
+      {
+        //     rotate([-90,0,0])rotate([0,90,0])translate([0,0,-width/2])
+        //       hinge(outd=10,axe= 2,h=width,parts=5, tol =tol,print="rigth", plate = "bottom",fld=0, opento= 0); 
+        //     rotate([-90,0,0])
+        //       rotate([0,-90,0])
+        //       translate([0,0,-width/2])
+        //       hinge(outd=10,axe= 2,h=width,parts=5, tol =tol,print="right", plate = "bottom",fld=0, opento= 0); 
+      }
     }
-  }
-  translate([0,-4.7*axd-2.6,-6.25])
-  {
-    rotate([-90,0,0])rotate([0,90,0])translate([0,0,-15])
-      hinge(outd=10,axe= 2,h=30,parts=5, tol =0.1,print="left", plate = "top",fld=2.4); 
-    rotate([-90,0,0])
-      rotate([0,-90,0])
-      translate([0,0,-15])
-      hinge(outd=10,axe= 2,h=30,parts=5, tol =0.1,print="right", plate = "bottom",fld=2.4); 
   }
   translate([0,-27,-26.25])
   {
@@ -116,7 +126,7 @@ module AchsenScharnier(axd = 10)
   }
 }//module AchsenScharnier()
 
-module AchsenHalter(axd = 10)
+module AchsenHalter(axd = 10, tol = 0.1)
 {
   difference()
   {
@@ -126,7 +136,7 @@ module AchsenHalter(axd = 10)
       rotate([90,0,0])translate([0,0,-1.5*axd])cylinder(d=axd, h = 3*axd);
       translate([0,-0.5*axd,0])
         rotate([90,0,0])
-        metrische_mutter_schablone(axd,startw = 0, toleranz = 0.1); //creates a Maxd nut, rotated by 30deg and with an added .1 width
+        metrische_mutter_schablone(axd,startw = 0, toleranz = tol); //creates a Maxd nut, rotated by 30deg and with an added .1 width
     }
   }
 }//module AchsenScharnier()
