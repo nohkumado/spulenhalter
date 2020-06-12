@@ -1,5 +1,5 @@
 use <Spulenhalter.scad>
 use <Spulenhalterschraube.scad>
-translate([98,0,0]) mutter(false);//true with minkowsky
-  
-spulenhalter(false);
+smooth = true;
+translate([98,0,0]) mutter(minkowsky = smooth);//true with minkowsky
+spulenhalter(minkowsky = smooth);
